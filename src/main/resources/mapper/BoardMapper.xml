@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.game3.mapper.BoardMapper">
+
+    <sql id="cols">
+        BI.BI_NUM, BI.BI_TITLE, BI.BI_CONTENT, BI.UI_NUM, UI.UI_NAME,
+        BI.CREDAT, BI.CRETIM, BI.LMODAT, BI.LMOTIM
+    </sql>
+
+    <select id="selectBoards" resultType="com.example.game3.vo.BoardVO">
+        SELECT <include refid="cols" />
+        FROM BOARD_INFO BI
+        INNER JOIN USER_INFO UI ON BI.UI_NUM = UI.UI_NUM
+        <where>
+            <if test="searchType != null and searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchType == 'title'">
+                        AND BI.BI_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchType == 'content'">
+                        AND BI.BI_CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchType == 'writer'">
+                        AND UI.UI_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+        ORDER BY BI.BI_NUM DESC
+        LIMIT #{offset}, #{rowCount}
+    </select>
+
+    <select id="selectBoardCount" resultType="int">
+        SELECT COUNT(*)
+        FROM BOARD_INFO BI
+        INNER JOIN USER_INFO UI ON BI.UI_NUM = UI.UI_NUM
+        <where>
+            <if test="searchType != null and searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchType == 'title'">
+                        AND BI.BI_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchType == 'content'">
+                        AND BI.BI_CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchType == 'writer'">
+                        AND UI.UI_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectBoard" resultType="com.example.game3.vo.BoardVO">
+        SELECT <include refid="cols" />
+        FROM BOARD_INFO BI
+        INNER JOIN USER_INFO UI ON BI.UI_NUM = UI.UI_NUM
+        WHERE BI.BI_NUM = #{biNum}
+    </select>
+
+    <insert id="insertBoard">
+        INSERT INTO BOARD_INFO (
+            BI_TITLE, BI_CONTENT, UI_NUM, UI_NAME
+        ) VALUES (
+            #{biTitle}, #{biContent}, #{uiNum}, #{uiName}
+        )
+    </insert>
+
+    <update id="updateBoard">
+        UPDATE BOARD_INFO
+        SET
+            BI_TITLE = #{biTitle},
+            BI_CONTENT = #{biContent},
+            LMODAT = DATE_FORMAT(NOW(), '%Y%m%d'),
+            LMOTIM = DATE_FORMAT(NOW(), '%H%i%s')
+        WHERE BI_NUM = #{biNum}
+    </update>
+
+    <delete id="deleteBoard">
+        DELETE FROM BOARD_INFO
+        WHERE BI_NUM = #{biNum}
+    </delete>
+</mapper>

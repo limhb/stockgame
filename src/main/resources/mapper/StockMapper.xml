@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.game3.mapper.StockMapper">
+
+    <!-- 1. 실시간 코인 가격 저장 -->
+    <insert id="insertStockPrice" parameterType="com.example.game3.vo.StockVO">
+        INSERT INTO STOCK_PRICE (
+            SYMBOL, PRICE, CREDAT, CRETIM
+        ) VALUES (
+            #{symbol}, #{price}, DATE_FORMAT(NOW(), '%Y%m%d'), DATE_FORMAT(NOW(), '%H%i%s')
+        )
+    </insert>
+
+    <!-- 2. 심볼별 최신 가격 조회 -->
+    <select id="selectLatestPrice" parameterType="String" resultType="com.example.game3.vo.StockVO">
+        SELECT *
+        FROM STOCK_PRICE
+        WHERE SYMBOL = #{symbol}
+        ORDER BY CREDAT DESC, CRETIM DESC, ST_NUM DESC
+        LIMIT 1
+    </select>
+
+    <!-- 3. 전체 가격 정보 조회 -->
+    <select id="selectAllPrices" resultType="com.example.game3.vo.StockVO">
+        SELECT *
+        FROM STOCK_PRICE
+        ORDER BY CREDAT DESC, CRETIM DESC, ST_NUM DESC
+    </select>
+
+    <!-- 4. 유저의 거래 기록 저장 -->
+    <insert id="insertTrade" parameterType="com.example.game3.vo.StockVO">
+        INSERT INTO TRADE_INFO (
+            SYMBOL, PRICE, TYPE, LEVERAGE, UI_NUM, AMOUNT, CREDAT, CRETIM
+        ) VALUES (
+            #{symbol}, #{price}, #{type}, #{leverage}, #{uiNum}, #{amount},
+            DATE_FORMAT(NOW(), '%Y%m%d'), DATE_FORMAT(NOW(), '%H%i%s')
+        )
+    </insert>
+
+    <!-- 5. 유저별 거래 기록 조회 -->
+    <select id="selectUserTrades" parameterType="int" resultType="com.example.game3.vo.StockVO">
+        SELECT *
+        FROM TRADE_INFO
+        WHERE UI_NUM = #{uiNum}
+        ORDER BY CREDAT DESC, CRETIM DESC, TR_NUM DESC
+    </select>
+
+</mapper>

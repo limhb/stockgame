@@ -1,0 +1,194 @@
+/* 다크&그레이 테마 */
+:root {
+    --dark-bg: #1a1a1a;
+    --dark-card: #2d2d2d;
+    --dark-text: #e0e0e0;
+    --dark-border: #404040;
+    --dark-hover: #3d3d3d;
+    --dark-primary: #6c757d;
+    --dark-secondary: #495057;
+    --dark-accent: #ff6b6b;
+    --dark-success: #28a745;
+    --dark-info: #17a2b8;
+    --dark-warning: #ffc107;
+    --dark-danger: #dc3545;
+}
+
+/* 기본 스타일 */
+body {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+    font-family: 'Nanum Gothic', sans-serif;
+}
+
+/* 카드 스타일 */
+.card {
+    background-color: var(--dark-card);
+    border: 1px solid var(--dark-border);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+    background-color: var(--dark-secondary);
+    border-bottom: 1px solid var(--dark-border);
+    color: var(--dark-text);
+}
+
+/* 테이블 스타일 */
+.table {
+    color: var(--dark-text);
+}
+
+.table thead th {
+    background-color: var(--dark-secondary);
+    border-bottom: 2px solid var(--dark-border);
+    color: var(--dark-text);
+}
+
+.table td {
+    border-top: 1px solid var(--dark-border);
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--dark-hover);
+    color: var(--dark-text);
+}
+
+/* 버튼 스타일 */
+.btn {
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--dark-primary);
+    border-color: var(--dark-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--dark-secondary);
+    border-color: var(--dark-secondary);
+}
+
+.btn-outline-secondary {
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--dark-secondary);
+    border-color: var(--dark-secondary);
+}
+
+/* 게임 관련 스타일 */
+.score-card {
+    background: linear-gradient(135deg, var(--dark-card) 0%, var(--dark-secondary) 100%);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.high-score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--dark-accent);
+    text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+/* 차트 스타일 */
+.chart-container {
+    background-color: var(--dark-card);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* 게임 컨트롤 스타일 */
+.game-controls {
+    background-color: var(--dark-card);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.game-controls button {
+    margin: 5px;
+    min-width: 100px;
+}
+
+/* 게임 정보 스타일 */
+.game-info {
+    background-color: var(--dark-card);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.game-info h5 {
+    color: var(--dark-text);
+    margin-bottom: 10px;
+}
+
+/* 보드 스타일 */
+.board-card {
+    background-color: var(--dark-card);
+    border: 1px solid var(--dark-border);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.board-card:hover {
+    transform: translateY(-5px);
+}
+
+.board-title {
+    color: var(--dark-text);
+    font-weight: bold;
+}
+
+.board-content {
+    color: var(--dark-text);
+    opacity: 0.9;
+}
+
+/* 랭킹 스타일 */
+.ranking-card {
+    background: linear-gradient(135deg, var(--dark-card) 0%, var(--dark-secondary) 100%);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.ranking-title {
+    color: var(--dark-text);
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+.ranking-item {
+    background-color: var(--dark-hover);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.ranking-item:hover {
+    background-color: var(--dark-secondary);
+    transform: translateX(5px);
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 15px;
+    }
+    
+    .game-controls button {
+        width: 100%;
+        margin: 5px 0;
+    }
+} 

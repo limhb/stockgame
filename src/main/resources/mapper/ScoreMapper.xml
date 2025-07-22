@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.game3.mapper.ScoreMapper">
+    <insert id="insertScoreWithParams">
+        INSERT INTO SCORE_INFO (UI_NUM, SI_SCORE, CREDAT)
+        VALUES (#{param1}, #{param2}, DATE_FORMAT(NOW(), '%Y%m%d'))
+    </insert>
+
+    <select id="selectUserHighScore" parameterType="int" resultType="Integer">
+        SELECT MAX(SI_SCORE) 
+        FROM SCORE_INFO 
+        WHERE UI_NUM = #{uiNum}
+    </select>
+
+    <select id="selectTopNScores" resultType="com.example.game3.vo.ScoreVO">
+        SELECT SI.*, UI.UI_NICK_NAME as uiNickName
+        FROM SCORE_INFO SI
+        JOIN USER_INFO UI ON SI.UI_NUM = UI.UI_NUM
+        ORDER BY SI.SI_SCORE DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="selectScores" parameterType="com.example.game3.vo.ScoreVO" resultType="com.example.game3.vo.ScoreVO">
+        SELECT SI.*, UI.UI_NICK_NAME as uiNickName
+        FROM SCORE_INFO SI
+        JOIN USER_INFO UI ON SI.UI_NUM = UI.UI_NUM
+        <where>
+            <if test="uiNum != null and uiNum != 0">
+                AND SI.UI_NUM = #{uiNum}
+            </if>
+        </where>
+        ORDER BY SI.SI_SCORE DESC
+    </select>
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.game3.mapper.UserMapper">
+
+	<sql id="cols">
+		UI_NUM, UI_ID, UI_PWD, UI_NAME, UI_NICK_NAME, UI_ADDR1,
+		UI_ADDR2, UI_ZIP, UI_PHONE, UI_TRANS, UI_EMAIL, UI_DESC, UI_GRADE,
+		CREDAT, CRETIM, LMODAT, LMOTIM, ACTIVE
+		
+	</sql>
+
+	<!-- 전체 사용자 조회 -->
+	<select id="selectUsers"
+		resultType="com.example.game3.vo.UserVO">
+		SELECT
+		<include refid="cols" />
+		FROM USER_INFO
+		<where>
+			<if test='uiName != null and uiName !=""'>
+			AND UI_NAME LIKE CONCAT('%',#{uiName},'%')
+			</if>
+		</where>	
+	</select>
+
+	<!-- 특정 사용자 조회 (UI_NUM 기준) -->
+	<select id="selectUser" resultType="com.example.game3.vo.UserVO">
+		SELECT
+		<include refid="cols" />
+		FROM USER_INFO WHERE UI_NUM=#{uiNum}
+	</select>
+
+	<select id="selectUserByIdAndPwd"
+		resultType="com.example.game3.vo.UserVO">
+		SELECT UI_NUM ,
+		UI_NAME ,
+		UI_ID ,
+		UI_NICK_NAME, 
+		UI_ADDR1,
+		UI_ADDR2, 
+		UI_ZIP, 
+		UI_PHONE,
+		UI_EMAIL,
+		UI_GRADE,
+		CREDAT,
+		CRETIM,
+		LMODAT,
+		LMOTIM
+		
+		FROM
+		USER_INFO
+		WHERE UI_ID=#{uiId}
+		AND UI_PWD=#{uiPwd}
+	</select>
+
+	<!-- 특정 사용자 조회 (UI_ID 기준) -->
+	<select id="selectUserById"
+		resultType="com.example.game3.vo.UserVO">
+		SELECT
+		<include refid="cols" />
+		FROM USER_INFO WHERE UI_ID=#{uiId}
+	</select>
+	
+	
+
+	<!-- 사용자 상태별 개수 조회 -->
+	<select id="selectCntByActive" resultType="map">
+		SELECT ACTIVE,
+		COUNT(*) AS CNT
+		FROM USER_INFO
+		GROUP BY ACTIVE
+	</select>
+
+	<!-- 사용자 추가 -->
+	<insert id="insertUser">
+		INSERT INTO USER_INFO (
+		UI_ID, UI_PWD, UI_NAME,
+		UI_NICK_NAME, UI_ADDR1, UI_ADDR2, UI_ZIP, UI_PHONE,
+		UI_EMAIL, UI_DESC,
+		UI_GRADE, UI_TRANS, ACTIVE)
+		VALUES (
+		#{uiId}, #{uiPwd},
+		#{uiName}, #{uiNickName}, #{uiAddr1}, #{uiAddr2}, #{uiZip},
+		#{uiPhone}, #{uiEmail}, #{uiDesc}, #{uiGrade},
+		#{uiTrans},
+		#{active})
+	</insert>
+
+	<!-- 사용자 정보 업데이트 -->
+	<update id="updateUser">
+		UPDATE USER_INFO
+		<set>
+			UI_PWD = #{uiPwd},
+			UI_NAME = #{uiName},
+			UI_NICK_NAME = #{uiNickName},
+			UI_ADDR1 = #{uiAddr1},
+			UI_ZIP = #{uiZip},
+		
+			<if test='uiAddr2 != null and uiAddr2 !=""'> UI_ADDR2 = #{uiAddr2}, </if>
+			<if test='uiPhone != null and uiPhone !=""'> UI_PHONE = #{uiPhone}, </if>
+			<if test='uiTrans != null and uiTrans !=""'> UI_TRANS = #{uiTrans}, </if>
+			<if test='uiEmail != null and uiEmail !=""'> UI_EMAIL = #{uiEmail}, </if>
+			<if test='uiDesc != null and uiDesc !=""'> UI_DESC = #{uiDesc}, </if>
+			<if test='uiGrade != null and uiGrade !=""'> UI_GRADE = #{uiGrade}, </if>
+			<if test='active != null and active !=""'> ACTIVE = #{active}, </if>
+			LMODAT = DATE_FORMAT(NOW(),'%Y%m%d'),
+			LMOTIM = DATE_FORMAT(NOW(),'%H%i%S')
+		</set>
+		WHERE UI_NUM=#{uiNum}
+	</update>
+
+
+	
+
+	
+
+	<!-- 사용자 삭제 (비활성화) -->
+	<update id="deleteUser">
+		DELETE FROM  USER_INFO
+    	WHERE UI_NUM = #{uiNum}
+	</update>
+
+</mapper>

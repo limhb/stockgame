@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.game3.mapper.CommentMapper">
+
+    <sql id="cols">
+        CI_NUM, BI_NUM, UI_NUM, UI_NAME, CI_CONTENT, CREDAT, CRETIM
+    </sql>
+
+    <select id="selectComments" resultType="com.example.game3.vo.CommentVO">
+        SELECT <include refid="cols"/> FROM COMMENT_INFO
+        WHERE BI_NUM = #{biNum}
+        ORDER BY CI_NUM ASC
+    </select>
+
+    <insert id="insertComment">
+        INSERT INTO COMMENT_INFO (BI_NUM, UI_NUM, UI_NAME, CI_CONTENT, CREDAT, CRETIM)
+        VALUES (
+            #{biNum},
+            #{uiNum},
+            #{uiName},
+            #{ciContent},
+            DATE_FORMAT(NOW(), '%Y%m%d'),
+            DATE_FORMAT(NOW(), '%H%i%s')
+        )
+    </insert>
+
+    <update id="updateComment">
+        UPDATE COMMENT_INFO
+        SET CI_CONTENT = #{ciContent}
+        WHERE CI_NUM = #{ciNum} AND UI_NUM = #{uiNum}
+    </update>
+
+    <delete id="deleteComment">
+        DELETE FROM COMMENT_INFO
+        WHERE CI_NUM = #{ciNum} AND UI_NUM = #{uiNum}
+    </delete>
+
+</mapper>
